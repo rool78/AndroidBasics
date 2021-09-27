@@ -2,7 +2,9 @@
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 
     class MainActivity : AppCompatActivity() {
@@ -13,9 +15,17 @@ import androidx.work.WorkManager
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val myWorkerRequest = OneTimeWorkRequestBuilder<MyWorker>()
+            .setInputData(getWorkerInputData())
+            .build()
 
-        workManager.enqueue(OneTimeWorkRequest.from(MyWorker::class.java))
-
+        workManager.enqueue(myWorkerRequest)
 
     }
+
+        private fun getWorkerInputData() : Data {
+            return Data.Builder()
+                .putString("DATA", "fooWorkerData")
+                .build()
+        }
 }
